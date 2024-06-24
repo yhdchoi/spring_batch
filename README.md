@@ -1,2 +1,2 @@
 # spring_batch_scheduler
-Spring Batch &amp; Scheduler
+Spring Batch &amp; Scheduler Demo Project
