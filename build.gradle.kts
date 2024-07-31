@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.yhdc"
-version = "0.0.1-SNAPSHOT"
+version = "spring-batch-quartz 1.0"
 
 java {
 	toolchain {
@@ -24,16 +24,22 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-batch")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-quartz")
-	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
 	implementation("org.springframework.boot:spring-boot-starter-web")
+
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+	implementation("org.springframework.boot:spring-boot-starter-batch")
+	implementation("org.springframework.boot:spring-boot-starter-quartz")
+
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	annotationProcessor("org.projectlombok:lombok")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.batch:spring-batch-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
