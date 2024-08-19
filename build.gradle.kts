@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.yhdc"
-version = "spring-batch-quartz 1.0"
+version = "spring-batch 1.0"
 
 java {
 	toolchain {
@@ -30,7 +30,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
 	implementation("org.springframework.boot:spring-boot-starter-batch")
-	implementation("org.springframework.boot:spring-boot-starter-quartz")
+//	implementation("org.springframework.boot:spring-boot-starter-quartz")
 
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 

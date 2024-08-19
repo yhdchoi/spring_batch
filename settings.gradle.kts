@@ -1,1 +1,1 @@
-rootProject.name = "batch_scheduler"
+rootProject.name = "spring_batch"
