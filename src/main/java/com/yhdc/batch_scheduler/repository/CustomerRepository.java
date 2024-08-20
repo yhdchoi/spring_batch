@@ -1,9 +1,12 @@
 package com.yhdc.batch_scheduler.repository;
 
-import com.yhdc.batch_scheduler.entity.User;
+import com.yhdc.batch_scheduler.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, UUID> {
+
 }
