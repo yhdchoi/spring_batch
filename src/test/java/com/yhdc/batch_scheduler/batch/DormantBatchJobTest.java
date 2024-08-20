@@ -42,7 +42,7 @@ class DormantBatchJobTest {
         saveCustomer(364);
 
         // When
-        dormantBatchJob.execute();
+        final JobExecution result = dormantBatchJob.execute();
 
         // Then
         final long dormantCount = customerRepository.findAll()
@@ -51,6 +51,7 @@ class DormantBatchJobTest {
                 .count();
 
         Assertions.assertEquals(3, dormantCount);
+        Assertions.assertEquals(BatchStatus.COMPLETED, result.getStatus());
 
     }
 
@@ -70,7 +71,7 @@ class DormantBatchJobTest {
         saveCustomer(2);
 
         // When
-        dormantBatchJob.execute();
+        final JobExecution result = dormantBatchJob.execute();
 
         // Then
         final long dormantCount = customerRepository.findAll()
@@ -79,6 +80,7 @@ class DormantBatchJobTest {
                 .count();
 
         Assertions.assertEquals(0, dormantCount);
+        Assertions.assertEquals(BatchStatus.COMPLETED, result.getStatus());
 
     }
 
@@ -87,7 +89,7 @@ class DormantBatchJobTest {
     void test3() {
 
         // When
-        dormantBatchJob.execute();
+        final JobExecution result = dormantBatchJob.execute();
 
         // Then
         final long dormantCount = customerRepository.findAll()
@@ -96,7 +98,21 @@ class DormantBatchJobTest {
                 .count();
 
         Assertions.assertEquals(0, dormantCount);
+        Assertions.assertEquals(BatchStatus.COMPLETED, result.getStatus());
 
+    }
+
+    @Test
+    @DisplayName("If the batch is failed, FAILED should be returned.")
+    void test4() {
+        // Given
+        final DormantBatchJob dormantBatchJob = new DormantBatchJob(null);
+
+        // When
+        final JobExecution result = dormantBatchJob.execute();
+
+        // Then
+        Assertions.assertEquals(BatchStatus.FAILED, result.getStatus());
     }
 
 
