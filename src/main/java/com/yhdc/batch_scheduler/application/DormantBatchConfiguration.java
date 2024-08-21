@@ -14,9 +14,13 @@ public class DormantBatchConfiguration {
                                     DormantBatchItemWriter dormantBatchItemWriter,
                                     DormantBatchJobExecutionListener dormantBatchJobExecutionListener) {
 
-        final DormantBatchTasklet<Customer, Customer> tasklet = new DormantBatchTasklet<>(dormantBatchItemReader, dormantBatchItemProcessor, dormantBatchItemWriter);
+        return BatchJob.builder()
+                .itemReader(dormantBatchItemReader)
+                .itemProcessor(dormantBatchItemProcessor)
+                .itemWriter(dormantBatchItemWriter)
+                .jobListener(dormantBatchJobExecutionListener)
+                .build();
 
-        return new BatchJob(tasklet, dormantBatchJobExecutionListener);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.yhdc.batch_scheduler.batch;
 
+import com.yhdc.batch_scheduler.application.DormantBatchTasklet;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -28,6 +30,11 @@ public class BatchJob {
 
             }
         });
+    }
+
+    @Builder
+    public BatchJob(ItemReader itemReader, ItemProcessor itemProcessor, ItemWriter itemWriter, JobExecutionListener jobListener) {
+        this(new DormantBatchTasklet<>(itemReader, itemProcessor, itemWriter));
     }
 
 
