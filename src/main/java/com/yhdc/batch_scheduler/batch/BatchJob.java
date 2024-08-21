@@ -32,6 +32,7 @@ public class BatchJob {
         });
     }
 
+
     @Builder
     public BatchJob(ItemReader itemReader, ItemProcessor itemProcessor, ItemWriter itemWriter, JobExecutionListener jobListener) {
         this(new DormantBatchTasklet<>(itemReader, itemProcessor, itemWriter));

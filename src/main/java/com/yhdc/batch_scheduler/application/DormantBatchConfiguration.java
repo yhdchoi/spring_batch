@@ -20,7 +20,6 @@ public class DormantBatchConfiguration {
                 .itemWriter(dormantBatchItemWriter)
                 .jobListener(dormantBatchJobExecutionListener)
                 .build();
-
     }
 
 }
