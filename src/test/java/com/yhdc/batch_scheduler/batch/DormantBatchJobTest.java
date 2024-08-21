@@ -12,13 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-class BatchJobTest {
+class DormantBatchJobTest {
 
     @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
-    private BatchJob batchJob;
+    private DormantBatchJob dormantBatchJob;
 
 
     @BeforeEach
@@ -42,7 +42,7 @@ class BatchJobTest {
         saveCustomer(364);
 
         // When
-        final JobExecution result = batchJob.execute();
+        final JobExecution result = dormantBatchJob.execute();
 
         // Then
         final long dormantCount = customerRepository.findAll()
@@ -71,7 +71,7 @@ class BatchJobTest {
         saveCustomer(2);
 
         // When
-        final JobExecution result = batchJob.execute();
+        final JobExecution result = dormantBatchJob.execute();
 
         // Then
         final long dormantCount = customerRepository.findAll()
@@ -89,7 +89,7 @@ class BatchJobTest {
     void test3() {
 
         // When
-        final JobExecution result = batchJob.execute();
+        final JobExecution result = dormantBatchJob.execute();
 
         // Then
         final long dormantCount = customerRepository.findAll()
@@ -102,18 +102,19 @@ class BatchJobTest {
 
     }
 
-//    @Test
-//    @DisplayName("If the batch is failed, FAILED should be returned.")
-//    void test4() {
-//        // Given
-//        final BatchJob batchJob = new BatchJob(null);
-//
-//        // When
-//        final JobExecution result = batchJob.execute();
-//
-//        // Then
-//        Assertions.assertEquals(BatchStatus.FAILED, result.getStatus());
-//    }
+    @Test
+    @DisplayName("If the batch is failed, FAILED should be returned.")
+    void test4() {
+
+        // Given
+        final DormantBatchJob batchJob = new DormantBatchJob(null, null);
+
+        // When
+        final JobExecution result = batchJob.execute();
+
+        // Then
+        Assertions.assertEquals(BatchStatus.FAILED, result.getStatus());
+    }
 
 
     private void saveCustomer(long minusDays) {

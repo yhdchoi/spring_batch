@@ -1,20 +1,33 @@
 package com.yhdc.batch_scheduler.batch;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Slf4j
-@Component
-public class BatchJob {
+public class DormantBatchJob {
 
     private final Tasklet tasklet;
     private final JobExecutionListener jobListener;
 
-    public BatchJob(Tasklet tasklet, JobExecutionListener jobListener) {
+    public DormantBatchJob(Tasklet tasklet) {
+        this(tasklet, null);
+    }
+
+    public DormantBatchJob(Tasklet tasklet, JobExecutionListener jobListener) {
         this.tasklet = tasklet;
-        this.jobListener = jobListener;
+        this.jobListener = Objects.requireNonNullElseGet(jobListener, () -> new JobExecutionListener() {
+            @Override
+            public void beforeJob(JobExecution jobExecution) {
+
+            }
+
+            @Override
+            public void afterJob(JobExecution jobExecution) {
+
+            }
+        });
     }
 
 
