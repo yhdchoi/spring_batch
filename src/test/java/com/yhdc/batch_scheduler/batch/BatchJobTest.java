@@ -12,13 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-class DormantBatchJobTest {
+class BatchJobTest {
 
     @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
-    private DormantBatchJob dormantBatchJob;
+    private BatchJob batchJob;
 
 
     @BeforeEach
@@ -42,7 +42,7 @@ class DormantBatchJobTest {
         saveCustomer(364);
 
         // When
-        final JobExecution result = dormantBatchJob.execute();
+        final BatchJobExecution result = batchJob.execute();
 
         // Then
         final long dormantCount = customerRepository.findAll()
@@ -71,7 +71,7 @@ class DormantBatchJobTest {
         saveCustomer(2);
 
         // When
-        final JobExecution result = dormantBatchJob.execute();
+        final BatchJobExecution result = batchJob.execute();
 
         // Then
         final long dormantCount = customerRepository.findAll()
@@ -89,7 +89,7 @@ class DormantBatchJobTest {
     void test3() {
 
         // When
-        final JobExecution result = dormantBatchJob.execute();
+        final BatchJobExecution result = batchJob.execute();
 
         // Then
         final long dormantCount = customerRepository.findAll()
@@ -107,10 +107,10 @@ class DormantBatchJobTest {
     void test4() {
 
         // Given
-        final DormantBatchJob batchJob = new DormantBatchJob(null, null);
+        final BatchJob batchJob = new BatchJob(null, null);
 
         // When
-        final JobExecution result = batchJob.execute();
+        final BatchJobExecution result = batchJob.execute();
 
         // Then
         Assertions.assertEquals(BatchStatus.FAILED, result.getStatus());

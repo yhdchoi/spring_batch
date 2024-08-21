@@ -1,60 +1,41 @@
 package com.yhdc.batch_scheduler.application;
 
-import com.yhdc.batch_scheduler.batch.Tasklet;
-import com.yhdc.batch_scheduler.entity.Customer;
-import com.yhdc.batch_scheduler.provider.EmailProvider;
-import com.yhdc.batch_scheduler.repository.CustomerRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import com.yhdc.batch_scheduler.batch.BatchTasklet;
+import com.yhdc.batch_scheduler.batch.ItemProcessor;
+import com.yhdc.batch_scheduler.batch.ItemReader;
+import com.yhdc.batch_scheduler.batch.ItemWriter;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-
 @Component
-public class DormantBatchTasklet implements Tasklet {
+public class DormantBatchTasklet<I, O> implements BatchTasklet {
 
-    private final CustomerRepository customerRepository;
-    private final EmailProvider emailProvider;
+    private final ItemReader<I> itemReader;
+    private final ItemProcessor<I, O> itemProcessor;
+    private final ItemWriter<O> itemWriter;
 
-    public DormantBatchTasklet(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-        this.emailProvider = new EmailProvider.Fake();
+    public DormantBatchTasklet(ItemReader<I> itemReader,
+                               ItemProcessor<I, O> itemProcessor,
+                               ItemWriter<O> itemWriter) {
+        this.itemReader = itemReader;
+        this.itemProcessor = itemProcessor;
+        this.itemWriter = itemWriter;
     }
 
     @Override
     public void execute() throws Exception {
-        int pageNo = 0;
-
         while (true) {
-            // 1. Look up customer
-            final PageRequest pageRequest = PageRequest.of(pageNo, 1, Sort.by(Sort.Direction.ASC, "id"));
-            final Page<Customer> page = customerRepository.findAll(pageRequest);
+            // 1. Read
+            final I itemRead = itemReader.read();
+            if (itemRead == null) break;
 
-            final Customer customer;
-            if (page.isEmpty()) {
-                break;
-            } else {
-                pageNo++;
-                customer = page.getContent().getFirst();
-            }
+            // 2. Process
+            final O processedItem = itemProcessor.process(itemRead);
+            if (processedItem == null) continue;
 
-            // 2. Check for dormant account
-            final boolean isDormantTarget = LocalDate.now()
-                    .minusDays(365)
-                    .isAfter(customer.getLoginAt().toLocalDate());
+            // 3. Write
+            itemWriter.write(processedItem);
 
-            if (isDormantTarget) {
-                customer.setStatus(Customer.Status.DORMANT);
-            } else {
-                continue;
-            }
-
-            // 3. Change account to dormant status
-            customerRepository.save(customer);
-
-            // 4. Send mail
-            emailProvider.sendEmail(customer.getEmail(), "Dormant status email.", "Do not reply.");
         }
     }
+
 }

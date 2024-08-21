@@ -1,8 +1,5 @@
 package com.yhdc.batch_scheduler.batch;
 
-public interface Tasklet {
-
+public interface BatchTasklet {
     void execute() throws Exception;
-
-
 }

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class JobExecution {
+public class BatchJobExecution {
 
     private BatchStatus status;
 
